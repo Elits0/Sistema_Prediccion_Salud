@@ -5,12 +5,11 @@ import pandas as pd
 # Cargar modelos
 # ==========================
 
-modelo_diabetes = joblib.load("models/modelo_diabetes.pkl")
-modelo_cardio = joblib.load("models/modelo_cardio.pkl")
+modelo_diabetes = joblib.load("Models/modelo_diabetes.pkl")
+modelo_cardio = joblib.load("Models/modelo_cardio.pkl")
 
-# Cargar columnas
-columnas_diabetes = joblib.load("models/columnas_diabetes.pkl")
-columnas_cardio = joblib.load("models/columnas_cardio.pkl")
+columnas_diabetes = joblib.load("Models/columnas_diabetes.pkl")
+columnas_cardio = joblib.load("Models/columnas_cardio.pkl")
 
 
 def predecir_diabetes(datos):
