@@ -1,77 +1,111 @@
+#----------------------
+#Librerias
+#----------------------
 import streamlit as st
-
 from src.paciente import Paciente
 from src.predict import predecir_diabetes, predecir_cardio
 from src.risk import calcular_riesgo
+from pathlib import Path
 
-# ----------------------------------------------------
-# Configuración
-# ----------------------------------------------------
-
+#---------------
+#CONFIG PAG
+#---------------
 st.set_page_config(
-    page_title="Sistema Inteligente de Salud",
+    page_title="HealthAI",
     page_icon="🩺",
     layout="wide"
 )
+#CARGAR CSS
+css = Path("assets/style.css").read_text()
+st.markdown(
+    f"<style>{css}</style>",
+    unsafe_allow_html=True
+)
 
-st.title("🩺 Sistema Inteligente de Evaluación de Riesgo")
-
+#HEADER ------------
 st.markdown("""
-Este sistema utiliza Inteligencia Artificial para estimar el riesgo de:
+<div class="card">
 
-- 🩸 Diabetes
-- ❤️ Enfermedad Cardiovascular
+<div class="titulo">
+🩺 HealthAI
+</div>
 
-Complete la información del paciente y presione **Analizar Paciente**.
-""")
+<div class="subtitulo">
 
-st.divider()
+Sistema Inteligente para la Predicción de Diabetes
+y Enfermedades Cardiovasculares mediante Machine Learning.
+
+</div>
+
+</div>
+""",unsafe_allow_html=True)
+
+# ============================================
+# LAYOUT PRINCIPAL
+# ============================================
+col_form, col_dash = st.columns([1, 2], gap="large")
 
 # ====================================================
-# INFORMACIÓN PERSONAL
+# DATOS PERSONALES
 # ====================================================
 
-st.header("👤 Información Personal")
+with col_form:
 
-col1, col2 = st.columns(2)
+    st.markdown("""
+    <div class="form-card">
 
-with col1:
+    <div class="form-title">
+    👤 Datos Personales
+    </div>
+    """, unsafe_allow_html=True)
 
-    edad = st.number_input(
-        "Edad",
-        min_value=18,
-        max_value=100,
-        value=40
-    )
+    col1, col2 = st.columns(2)
 
-    sexo = st.selectbox(
-        "Sexo",
-        ["Hombre", "Mujer"]
-    )
+    with col1:
 
-with col2:
+        edad = st.number_input(
+            "Edad",
+            min_value=18,
+            max_value=100,
+            value=40
+        )
 
-    altura = st.number_input(
-        "Altura (cm)",
-        min_value=120,
-        max_value=220,
-        value=170
-    )
+        sexo = st.selectbox(
+            "Sexo",
+            ["Hombre", "Mujer"]
+        )
 
-    peso = st.number_input(
-        "Peso (kg)",
-        min_value=30,
-        max_value=200,
-        value=70
-    )
+    with col2:
 
-st.divider()
+        altura = st.number_input(
+            "Altura (cm)",
+            min_value=120,
+            max_value=220,
+            value=170
+        )
+
+        peso = st.number_input(
+            "Peso (kg)",
+            min_value=30,
+            max_value=200,
+            value=70
+        )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.divider()
 
 # ====================================================
 # SIGNOS VITALES
 # ====================================================
 
-st.header("❤️ Signos Vitales")
+st.markdown("""
+<div class="form-card">
+
+<div class="form-title">
+❤️ Signos Vitales
+</div>
+""", unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 
@@ -79,19 +113,18 @@ with col1:
 
     presion_sistolica = st.number_input(
         "Presión Sistólica",
-        80,
-        250,
-        120
+        min_value=80,
+        max_value=250,
+        value=120
     )
 
     colesterol = st.selectbox(
         "Colesterol",
-        [1,2,3],
-        format_func=lambda x:
-        {
-            1:"Normal",
-            2:"Por encima de lo normal",
-            3:"Muy alto"
+        [1, 2, 3],
+        format_func=lambda x: {
+            1: "Normal",
+            2: "Por encima de lo normal",
+            3: "Muy alto"
         }[x]
     )
 
@@ -99,21 +132,22 @@ with col2:
 
     presion_diastolica = st.number_input(
         "Presión Diastólica",
-        40,
-        180,
-        80
+        min_value=40,
+        max_value=180,
+        value=80
     )
 
     glucosa = st.selectbox(
         "Glucosa",
-        [1,2,3],
-        format_func=lambda x:
-        {
-            1:"Normal",
-            2:"Por encima de lo normal",
-            3:"Muy alta"
+        [1, 2, 3],
+        format_func=lambda x: {
+            1: "Normal",
+            2: "Por encima de lo normal",
+            3: "Muy alta"
         }[x]
     )
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -121,31 +155,40 @@ st.divider()
 # HÁBITOS
 # ====================================================
 
-st.header("🥗 Hábitos")
+st.markdown("""
+<div class="form-card">
 
-col1, col2, col3 = st.columns(3)
+<div class="form-title">
+🥗 Hábitos
+</div>
+""", unsafe_allow_html=True)
 
-with col1:
+fuma = st.selectbox(
+    "¿Fuma actualmente?",
+    ["No", "Sí"]
+)
 
-    fuma = st.checkbox("Fuma")
+alcohol = st.selectbox(
+    "¿Consume alcohol?",
+    ["No", "Sí"]
+)
 
-    alcohol = st.checkbox("Consume Alcohol")
+actividad = st.selectbox(
+    "¿Realiza actividad física?",
+    ["Sí", "No"]
+)
 
-with col2:
+frutas = st.selectbox(
+    "¿Consume frutas regularmente?",
+    ["Sí", "No"]
+)
 
-    actividad = st.checkbox(
-        "Actividad Física"
-    )
+verduras = st.selectbox(
+    "¿Consume verduras regularmente?",
+    ["Sí", "No"]
+)
 
-with col3:
-
-    frutas = st.checkbox(
-        "Consume Frutas"
-    )
-
-    verduras = st.checkbox(
-        "Consume Verduras"
-    )
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
 
@@ -153,54 +196,36 @@ st.divider()
 # ESTADO GENERAL
 # ====================================================
 
-st.header("🩺 Estado General")
+st.markdown("""
+<div class="form-card">
 
-col1, col2 = st.columns(2)
+<div class="form-title">
+🩺 Estado General
+</div>
+""", unsafe_allow_html=True)
 
-with col1:
+salud_general = st.selectbox(
+    "¿Cómo considera su estado general de salud?",
+    [
+        "Excelente",
+        "Muy buena",
+        "Buena",
+        "Regular",
+        "Mala"
+    ]
+)
 
-    salud_general = st.slider(
-        "Estado General de Salud",
-        1,
-        5,
-        3
-    )
+dificultad_caminar = st.selectbox(
+    "¿Tiene dificultad para caminar?",
+    ["No", "Sí"]
+)
 
-    salud_fisica = st.slider(
-        "Días con mala salud física",
-        0,
-        30,
-        0
-    )
-
-    salud_mental = st.slider(
-        "Días con mala salud mental",
-        0,
-        30,
-        0
-    )
-
-with col2:
-
-    dificultad_caminar = st.checkbox(
-        "Dificultad para caminar"
-    )
-
-    educacion = st.slider(
-        "Nivel educativo",
-        1,
-        6,
-        4
-    )
-
-    ingresos = st.slider(
-        "Nivel de ingresos",
-        1,
-        8,
-        5
-    )
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
+
+#desorden
+
 
 analizar = st.button(
     "🔍 Analizar Paciente",
@@ -208,48 +233,54 @@ analizar = st.button(
 )
 
 if analizar:
+    estado_map = {
+    "Excelente": 1,
+    "Muy buena": 2,
+    "Buena": 3,
+    "Regular": 4,
+    "Mala": 5
+}
 
     datos = {
 
-        "edad": edad,
+    "edad": edad,
 
-        "sexo": 1 if sexo == "Hombre" else 0,
+    "sexo": 1 if sexo == "Hombre" else 0,
 
-        "altura": altura,
+    "altura": altura,
 
-        "peso": peso,
+    "peso": peso,
 
-        "presion_sistolica": presion_sistolica,
+    "presion_sistolica": presion_sistolica,
 
-        "presion_diastolica": presion_diastolica,
+    "presion_diastolica": presion_diastolica,
 
-        "colesterol": colesterol,
+    "colesterol": colesterol,
 
-        "glucosa": glucosa,
+    "glucosa": glucosa,
 
-        "fuma": int(fuma),
+    "fuma": 1 if fuma == "Sí" else 0,
 
-        "alcohol": int(alcohol),
+    "alcohol": 1 if alcohol == "Sí" else 0,
 
-        "actividad_fisica": int(actividad),
+    "actividad_fisica": 1 if actividad == "Sí" else 0,
 
-        "frutas": int(frutas),
+    "frutas": 1 if frutas == "Sí" else 0,
 
-        "verduras": int(verduras),
+    "verduras": 1 if verduras == "Sí" else 0,
 
-        "salud_general": salud_general,
+    "salud_general": estado_map[salud_general],
 
-        "salud_fisica": salud_fisica,
+    "salud_fisica": 0,
 
-        "salud_mental": salud_mental,
+    "salud_mental": 0,
 
-        "dificultad_caminar": int(dificultad_caminar),
+    "dificultad_caminar": 1 if dificultad_caminar == "Sí" else 0,
 
-        "educacion": educacion,
+    "educacion": 4,
 
-        "ingresos": ingresos
-
-    }
+    "ingresos": 5
+}
 
     paciente = Paciente(datos)
 
@@ -268,11 +299,11 @@ if analizar:
 
     st.divider()
 
-    st.header("📊 Resultados")
+    st.markdown("## 📊 Dashboard de Resultados")
 
-    col1, col2, col3 = st.columns(3)
+    c1, c2, c3 = st.columns(3)
 
-    with col1:
+    with c1:
 
         st.metric(
             "🩸 Riesgo Diabetes",
@@ -281,7 +312,7 @@ if analizar:
 
         st.progress(float(prob_d))
 
-    with col2:
+    with c2:
 
         st.metric(
             "❤️ Riesgo Cardiovascular",
@@ -290,7 +321,7 @@ if analizar:
 
         st.progress(float(prob_c))
 
-    with col3:
+    with c3:
 
         st.metric(
             "🚦 Riesgo General",

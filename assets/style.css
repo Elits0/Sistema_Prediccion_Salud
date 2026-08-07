@@ -1,0 +1,93 @@
+/* Fondo */
+.stApp{
+    background:#f5f7fb;
+}
+
+/* Ocultar menú */
+#MainMenu{
+    visibility:hidden;
+}
+
+footer{
+    visibility:hidden;
+}
+
+header{
+    visibility:hidden;
+}
+
+/* Tarjetas */
+
+.card{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:0px 5px 18px rgba(0,0,0,.08);
+
+margin-bottom:20px;
+
+}
+
+/* Títulos */
+
+.titulo{
+
+font-size:40px;
+
+font-weight:700;
+
+color:#1565C0;
+
+}
+
+.subtitulo{
+
+font-size:18px;
+
+color:#666;
+
+}
+
+/* Sidebar */
+
+section[data-testid="stSidebar"]{
+
+background:#1565C0;
+
+}
+
+section[data-testid="stSidebar"] *{
+
+color:white;
+
+}
+
+/* Botón */
+
+.stButton>button{
+
+background:#1565C0;
+
+color:white;
+
+border-radius:10px;
+
+height:55px;
+
+font-size:18px;
+
+font-weight:bold;
+
+width:100%;
+
+}
+
+.stButton>button:hover{
+
+background:#0D47A1;
+
+}
